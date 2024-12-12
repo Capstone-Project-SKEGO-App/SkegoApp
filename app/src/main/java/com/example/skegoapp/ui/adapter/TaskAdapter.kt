@@ -5,30 +5,47 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skegoapp.R
 import com.example.skegoapp.data.pref.Task
-import java.text.SimpleDateFormat
-import java.util.*
+
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TaskAdapter(
-    private val tasks: List<Task>,
-    private val itemClickListener: (Task) -> Unit // Listener untuk item klik
+    private var tasks: List<Task>,
+    private val itemClickListener: (Task) -> Unit,
+    private val deleteClickListener: (Task) -> Unit,
+    private val editClickListener: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
+    fun updateTasks(newTasks: List<Task>) {
+        tasks = newTasks
+        notifyDataSetChanged()
+    }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskTitle: TextView = itemView.findViewById(R.id.task_title)
         val dueDate: TextView = itemView.findViewById(R.id.due_date)
-        val priority: TextView = itemView.findViewById(R.id.task_difficulty)
+        val difficulty: TextView = itemView.findViewById(R.id.task_difficulty)
         val taskType: TextView = itemView.findViewById(R.id.task_category)
-        val statusSpinner: Spinner = itemView.findViewById(R.id.status_spinner)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.icon_delete)
+        val editButton: ImageButton = itemView.findViewById(R.id.icon_edit)// Icon delete
 
         init {
             itemView.setOnClickListener {
-                // Kirim task saat item diklik
                 itemClickListener(tasks[adapterPosition])
+            }
+            deleteButton.setOnClickListener {
+                deleteClickListener(tasks[adapterPosition]) // Trigger delete callback
+            }
+
+            editButton.setOnClickListener {
+                editClickListener(tasks[adapterPosition]) // Trigger edit callback
             }
         }
     }
@@ -41,28 +58,26 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val currentTask = tasks[position]
 
-        // Set data untuk setiap elemen tampilan
-        holder.taskTitle.text = currentTask.task_name ?: "No Task Name"
-        holder.dueDate.text = "Due: ${formatDeadline(currentTask.deadline)}"
-        holder.priority.text = currentTask.difficulty_level.toString()
+        holder.taskTitle.text = currentTask.title
+        holder.difficulty.text = currentTask.difficulty
         holder.taskType.text = currentTask.category
+        holder.dueDate.text = "Due ${formatDueDate(currentTask.deadline, "itemTask")}"
 
-        // Set background warna untuk difficultyLevel
-        holder.priority.setBackgroundColor(
+        // Set background color based on priority
+        holder.difficulty.setBackgroundColor(
             holder.itemView.context.getColor(
-                when (currentTask.difficulty_level) {
-                    1 -> R.color.red
-                    2 -> R.color.yellow
-                    3 -> R.color.green
+                when (currentTask.difficulty) {
+                    "HIGH" -> R.color.red
+                    "MEDIUM" -> R.color.yellow
+                    "LOW" -> R.color.green
                     else -> R.color.gray
                 }
             )
         )
 
-        // Set background warna untuk kategori
         holder.taskType.setBackgroundColor(
             holder.itemView.context.getColor(
-                when (currentTask.category.uppercase()) {
+                when (currentTask.category) {
                     "WORK" -> R.color.blue
                     "SCHOOL" -> R.color.orange
                     "PERSONAL" -> R.color.purple
@@ -70,50 +85,27 @@ class TaskAdapter(
                 }
             )
         )
-
-        // Setup Spinner untuk status
-        val statusAdapter = ArrayAdapter.createFromResource(
-            holder.itemView.context,
-            R.array.status_array,
-            android.R.layout.simple_spinner_item
-        )
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        holder.statusSpinner.adapter = statusAdapter
-
-        // Set status spinner ke nilai yang sesuai
-        val statusPosition = statusAdapter.getPosition(currentTask.status)
-        holder.statusSpinner.setSelection(statusPosition)
-
-        // Update status saat spinner dipilih
-        holder.statusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val newStatus = parent.getItemAtPosition(position).toString()
-                if (currentTask.status != newStatus) {
-                    currentTask.status = newStatus
-                    // Anda dapat menambahkan logika untuk menyimpan perubahan status ke server/DB
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
     }
 
     override fun getItemCount(): Int = tasks.size
 
-    private fun formatDeadline(deadline: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val outputFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+    fun formatDueDate(dateString: String, formatType: String): String {
         return try {
-            val date = inputFormat.parse(deadline)
-            date?.let { outputFormat.format(it) } ?: "Invalid Date"
+            // Parse tanggal dari format backend
+            val zonedDateTime = ZonedDateTime.parse(dateString)
+
+            // Format ke format yang diinginkan
+            val outputFormat = when (formatType) {
+                "itemTask" -> DateTimeFormatter.ofPattern("dd MMM", Locale.getDefault()) // Contoh: 26 Nov
+                "detailTask" -> DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()) // Contoh: 26 November 2024
+                else -> DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()) // Default format
+            }
+            zonedDateTime.format(outputFormat)
         } catch (e: Exception) {
-            "Invalid Date"
+            e.printStackTrace()
+            ""
         }
     }
+
 }
+

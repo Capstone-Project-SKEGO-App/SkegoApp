@@ -14,6 +14,8 @@
     <string name="arrow_icon">Arrow Icon</string>
     <string name="reset_password_icon">Password Icon</string>
     <string name="about_icon">About Icon</string>
+    <string name="edit_task">Edit Icon</string>
+    <string name="delete_icon">Delete Icon</string>
 
     <string-array name="status_array">
         <item>Not Started</item>

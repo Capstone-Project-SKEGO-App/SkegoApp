@@ -4,10 +4,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object ApiConfig {
 
-    private const val BASE_URL = "http://34.101.163.68:5000/api/"
+    private const val BASE_URL = "https://backend-skego-619804298613.asia-southeast2.run.app/api/"
 
     fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -16,6 +17,9 @@ object ApiConfig {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)  // Set timeout untuk koneksi
+            .writeTimeout(30, TimeUnit.SECONDS)    // Set timeout untuk menulis
+            .readTimeout(30, TimeUnit.SECONDS)     // Set timeout untuk membaca respons
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -27,6 +31,7 @@ object ApiConfig {
         return retrofit.create(ApiService::class.java)
     }
 }
+
 
 
 

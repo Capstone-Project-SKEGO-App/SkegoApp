@@ -1,13 +1,21 @@
 package com.example.skegoapp.data.remote.retrofit
 
+import com.example.skegoapp.data.pref.AddTaskRequest
 import com.example.skegoapp.data.pref.ForgotPasswordRequest
+import com.example.skegoapp.data.pref.GenerateRequest
 import com.example.skegoapp.data.pref.LoginRequest
 import com.example.skegoapp.data.pref.RegisterRequest
 import com.example.skegoapp.data.pref.Routine
-import com.example.skegoapp.data.pref.Task
+import com.example.skegoapp.data.pref.UpdateTaskRequest
+import com.example.skegoapp.data.remote.response.AddTaskResponse
+import com.example.skegoapp.data.remote.response.DeleteTaskResponse
 import com.example.skegoapp.data.remote.response.ForgotPasswordResponse
+import com.example.skegoapp.data.remote.response.GenerateResponse
 import com.example.skegoapp.data.remote.response.LoginResponse
 import com.example.skegoapp.data.remote.response.RegisterResponse
+import com.example.skegoapp.data.remote.response.SortedTasksResponse
+import com.example.skegoapp.data.remote.response.TaskResponseItem
+import com.example.skegoapp.data.remote.response.UpdateTaskResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -48,15 +56,26 @@ interface ApiService {
     @DELETE("routines/{id}")
     fun deleteRoutine(@Path("id") id: Int): Call<Void>
 
-    @POST("tasks")
-    fun addTask(@Body task: Task): Call<Task>
-
     @GET("tasks")
-    fun getTasksByUserId(@Query("user_id") userId: Int): Call<List<Task>>
+    suspend fun getTasks(@Query("user_id") userId: Int): List<TaskResponseItem>
+
+    @POST("tasks")
+    suspend fun addTask(@Body request: AddTaskRequest): AddTaskResponse
 
     @PUT("tasks/{id}")
-    fun updateTask(@Path("id") id: Int, @Body task: Task): Call<Task>
+    suspend fun updateTask(
+        @Path("id") taskId: Int,
+        @Body request: UpdateTaskRequest
+    ): UpdateTaskResponse
 
     @DELETE("tasks/{id}")
-    fun deleteTask(@Path("id") id: Int): Call<Void>
+    suspend fun deleteTask(@Path("id") taskId: Int): DeleteTaskResponse
+
+    @POST("generates")
+    suspend fun postGenerate(@Body request: GenerateRequest): GenerateResponse
+
+    @GET("generates")
+    suspend fun getSortedTasks(@Query("user_id") userId: Int): SortedTasksResponse
+
+
 }
