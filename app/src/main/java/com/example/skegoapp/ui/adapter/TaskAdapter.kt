@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skegoapp.R
 import com.example.skegoapp.data.pref.Task
+import java.time.LocalDate
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -94,8 +95,8 @@ class TaskAdapter(
 
     fun formatDueDate(dateString: String, formatType: String): String {
         return try {
-            // Parse tanggal dari format backend
-            val zonedDateTime = ZonedDateTime.parse(dateString)
+            // Parse tanggal dari format backend (YYYY-MM-DD)
+            val localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()))
 
             // Format ke format yang diinginkan
             val outputFormat = when (formatType) {
@@ -103,7 +104,7 @@ class TaskAdapter(
                 "detailTask" -> DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()) // Contoh: 26 November 2024
                 else -> DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()) // Default format
             }
-            zonedDateTime.format(outputFormat)
+            localDate.format(outputFormat)
         } catch (e: Exception) {
             e.printStackTrace()
             ""
