@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -15,29 +14,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="22dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="Menu Icon"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_back"
-        app:tint="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/hello_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="108dp"
+        android:layout_height="46dp"
         android:layout_marginTop="112dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Hello,"
+        android:text="@string/hello"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -50,7 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
-        android:text="User"
+        android:text="@string/user"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -59,20 +44,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hello_text_view" />
 
+    <!-- About LinearLayout -->
     <TextView
         android:id="@+id/email_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        android:text="user@gmail.com"
+        android:text="@string/user_gmail_com"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/username_text_view"
+        app:layout_constraintVertical_bias="0.511" />
 
-    <!-- About LinearLayout -->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -101,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="Reset Password"
+            android:text="@string/reset_password"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -114,6 +101,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -139,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="About"
+            android:text="@string/_title"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -160,7 +148,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Logout"
+        android:text="@string/logout"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

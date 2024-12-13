@@ -1,36 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffb332"
-    tools:context=".ui.main.task.TaskFragment">
+    android:background="#ffb332">
 
-    <!-- NestedScrollView untuk menggulir semua konten -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingBottom="80dp">
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
-            <!-- Header dengan tombol menu dan notifikasi -->
-            <ImageButton
-                android:id="@+id/icon_notification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="22dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="Menu Icon"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_notification"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_dashboard"
@@ -38,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Your Task"
+                android:text="@string/your_task"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
@@ -53,7 +36,7 @@
                 android:layout_marginTop="22dp"
                 android:layout_marginEnd="22dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="Notification Icon"
+                android:contentDescription="@string/notification_icon"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_plus"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,14 +65,15 @@
                 android:fontFamily="@font/poppins_medium"
                 android:longClickable="true"
                 android:padding="12dp"
-                android:text="Generate"
+                android:text="@string/generate"
                 android:textColor="#ffb332"
                 android:textSize="18sp"
                 app:cornerRadius="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_dashboard" />
+                app:layout_constraintTop_toBottomOf="@id/text_dashboard"
+                tools:ignore="RtlHardcoded" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -104,7 +88,7 @@
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:visibility="visible"
@@ -113,10 +97,9 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.157" />
+                app:layout_constraintVertical_bias="0.209" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

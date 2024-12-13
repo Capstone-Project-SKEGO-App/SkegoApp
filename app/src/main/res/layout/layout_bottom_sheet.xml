@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <!-- Ikon inspiratif -->
+    <ImageView
+        android:id="@+id/icon_action"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_task_option"
+        android:contentDescription="@string/rocket_icon"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Pertanyaan -->
+    <TextView
+        android:id="@+id/tv_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/what_would"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Tombol untuk AddTask -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_add_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/add_a_new_task"
+        android:textSize="20sp"
+        android:icon="@drawable/ic_plus"
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.Material3.Button" />
+
+    <!-- Tombol untuk AddRoutine -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_add_routine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="20sp"
+        android:text="@string/create_a_routine"
+        android:icon="@drawable/ic_plus"
+        style="@style/Widget.Material3.Button" />
+</LinearLayout>

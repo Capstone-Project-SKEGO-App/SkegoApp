@@ -63,7 +63,7 @@ class LoginFragment : Fragment() {
         val colorSpan = ForegroundColorSpan(
             ContextCompat.getColor(requireContext(), R.color.orange_text)
         )
-        spannableString.setSpan(colorSpan, 20, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(colorSpan, 20, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.textViewCreateAccount.text = spannableString
 
         binding.textViewForgotPassword.setOnClickListener {

@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="53dp"
-            android:text="Welcome to"
+            android:text="@string/welcome_to"
             android:textColor="@color/brown_text"
             android:fontFamily="@font/poppins_bold"
             android:textSize="40sp"/>
@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Skego"
+            android:text="@string/skego"
             android:textColor="@color/orange_text"
             android:fontFamily="@font/poppins_bold"
             android:textSize="40sp"/>
@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Organize your schedule with us for more effectiveness and efficiency."
+            android:text="@string/organize"
             android:textColor="@color/brown_text"
             android:fontFamily="@font/poppins_light"
             android:layout_marginTop="20dp"
@@ -51,7 +51,7 @@
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/login"
             android:fontFamily="@font/poppins_bold"
             android:layout_marginTop="10dp"
             app:cornerRadius="16dp"
@@ -63,7 +63,7 @@
             android:id="@+id/createAccountButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create New Account"
+            android:text="@string/create_new_account"
             android:fontFamily="@font/poppins_bold"
             android:textColor="#FFB332"
             android:background="@drawable/bg_btn"

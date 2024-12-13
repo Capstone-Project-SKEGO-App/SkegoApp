@@ -41,18 +41,9 @@ interface ApiService {
     @POST("users/change-password")
     suspend fun changePassword(@Body body: ForgotPasswordRequest): Response<ForgotPasswordResponse>
 
-    @GET("routines")
-    fun getRoutines(): Call<List<Routine>>
-
-    // Menambah rutinitas baru
     @POST("routines")
     fun addRoutine(@Body routine: Routine): Call<Routine>
 
-    // Mendapatkan detail rutinitas berdasarkan ID
-    @GET("routines/{id}")
-    fun getRoutineById(@Path("id") id: Int): Call<Routine>
-
-    // Menghapus rutinitas berdasarkan ID
     @DELETE("routines/{id}")
     fun deleteRoutine(@Path("id") id: Int): Call<Void>
 
@@ -68,6 +59,23 @@ interface ApiService {
         @Body request: UpdateTaskRequest
     ): UpdateTaskResponse
 
+    @GET("routines")
+    suspend fun getRoutinesByUserId(
+        @Query("user_id") userId: Int
+    ): Response<List<Routine>>
+
+    @GET("routines")
+    suspend fun getRoutinesByUserIdAndDate(
+        @Query("user_id") userId: Int,
+        @Query("date_routine") dateRoutine: String
+    ): Response<List<Routine>>
+
+    @PUT("routines/{id}")
+    fun updateRoutine(
+        @Path("id") id: Int,
+        @Body routine: Routine
+    ): Call<Routine>
+
     @DELETE("tasks/{id}")
     suspend fun deleteTask(@Path("id") taskId: Int): DeleteTaskResponse
 
@@ -76,6 +84,4 @@ interface ApiService {
 
     @GET("generates")
     suspend fun getSortedTasks(@Query("user_id") userId: Int): SortedTasksResponse
-
-
 }

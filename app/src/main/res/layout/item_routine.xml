@@ -19,9 +19,11 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="8dp"
+            android:contentDescription="@string/clock_icon"
             android:src="@drawable/ic_clock"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFB332" />
 
         <!-- Waktu Rutin -->
         <TextView
@@ -29,20 +31,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="11:30 AM - 12:30 PM"
+            android:text="@string/time_time"
             android:fontFamily="@font/poppins_medium"
             android:textSize="12sp"
             android:textColor="#585A66"
             app:layout_constraintStart_toEndOf="@id/routine_logo"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="RtlHardcoded" />
 
         <!-- Judul Rutin -->
         <TextView
             android:id="@+id/routine_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Routine Title"
+            android:text="@string/routine_title"
             android:layout_marginTop="8dp"
             android:textSize="18sp"
             android:fontFamily="@font/poppins_bold"
@@ -57,7 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="A sales presentation with a potential client. The meeting is set to take place in London, and the a..."
+            android:text="@string/desc_2"
             android:textColor="#585A66"
             android:fontFamily="@font/poppins_light"
             android:textSize="14sp"
@@ -71,7 +74,9 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/location_icon"
             android:src="@drawable/ic_location"
+            app:tint="#FFB332"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/routine_description" />
 
@@ -81,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="London, UK"
+            android:text="@string/london_uk"
             android:textSize="14sp"
             android:fontFamily="@font/poppins_regular"
             android:textColor="#585A66"
@@ -89,17 +94,31 @@
             app:layout_constraintTop_toTopOf="@id/iv_location_icon"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Icon Options -->
+        <!-- Tombol Edit -->
         <ImageView
-            android:id="@+id/ic_option"
-            android:layout_width="20dp"
-            android:layout_height="21dp"
-            android:src="@drawable/ic_options"
+            android:id="@+id/btn_edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/icon_edit"
+            android:src="@drawable/ic_edit"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Tombol Hapus -->
+        <ImageView
+            android:id="@+id/btn_delete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/delete_icon"
+            android:src="@drawable/ic_delete"
+            android:layout_marginEnd="0dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/routine_title" />
-
-
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

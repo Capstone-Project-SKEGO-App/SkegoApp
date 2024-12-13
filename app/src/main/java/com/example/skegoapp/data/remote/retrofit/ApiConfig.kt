@@ -17,9 +17,9 @@ object ApiConfig {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)  // Set timeout untuk koneksi
-            .writeTimeout(30, TimeUnit.SECONDS)    // Set timeout untuk menulis
-            .readTimeout(30, TimeUnit.SECONDS)     // Set timeout untuk membaca respons
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -31,8 +31,3 @@ object ApiConfig {
         return retrofit.create(ApiService::class.java)
     }
 }
-
-
-
-
-

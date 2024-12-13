@@ -70,7 +70,7 @@ class RegisterFragment : Fragment() {
         val colorSpan = ForegroundColorSpan(
             ContextCompat.getColor(requireContext(), R.color.orange_text)
         )
-        spannableString.setSpan(colorSpan, 20, 29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(colorSpan, 22, 29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.textViewLoginAccount.text = spannableString
 
         binding.textViewLoginAccount.setOnClickListener {

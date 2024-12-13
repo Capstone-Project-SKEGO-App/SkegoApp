@@ -1,8 +1,10 @@
 package com.example.skegoapp.ui.main.edit_task
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -153,6 +155,7 @@ class EditTaskActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("DefaultLocale")
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -172,22 +175,5 @@ class EditTaskActivity : AppCompatActivity() {
         }, year, month, day).show()
     }
 
-    fun formatDueDate(dateString: String, formatType: String): String {
-        return try {
-            // Parse tanggal dari format backend
-            val zonedDateTime = ZonedDateTime.parse(dateString)
-
-            // Format ke format yang diinginkan
-            val outputFormat = when (formatType) {
-                "itemTask" -> DateTimeFormatter.ofPattern("dd MMM", Locale.getDefault()) // Contoh: 26 Nov
-                "detailTask" -> DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()) // Contoh: 26 November 2024
-                else -> DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()) // Default format
-            }
-            zonedDateTime.format(outputFormat)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
-    }
-
+    fun showDatePicker(view: View) {}
 }

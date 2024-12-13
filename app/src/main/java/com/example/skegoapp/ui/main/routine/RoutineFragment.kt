@@ -1,5 +1,6 @@
 package com.example.skegoapp.ui.main.routine
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,19 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.skegoapp.R
 import com.example.skegoapp.databinding.FragmentRoutineBinding
 import com.example.skegoapp.ui.adapter.RoutineAdapter
 import com.example.skegoapp.ui.main.add_routine.AddRoutineActivity
 import com.example.skegoapp.data.remote.retrofit.ApiConfig
 import com.example.skegoapp.data.pref.Routine
+import com.example.skegoapp.data.pref.UserPreference
+import com.example.skegoapp.data.pref.dataStore
+import com.example.skegoapp.data.remote.retrofit.ApiService
 import com.example.skegoapp.ui.adapter.CalendarAdapter
 import com.example.skegoapp.ui.main.home.ProfileActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +34,7 @@ class RoutineFragment : Fragment() {
     private lateinit var calendar: Calendar
     private lateinit var routineAdapter: RoutineAdapter
     private var routines: List<Routine> = emptyList()
+    private lateinit var userPreference: UserPreference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,40 +43,104 @@ class RoutineFragment : Fragment() {
         _binding = FragmentRoutineBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // Initialize calendar instance
+        // Initialize user preference to get user data
+        userPreference = UserPreference.getInstance(requireContext().dataStore)
+
+        // Initialize the calendar instance
         calendar = Calendar.getInstance()
 
+        // Setup calendar components and month navigation buttons
         setupMonthCalendar()
         setupMonthNavigation()
         setupCalendarButton()
         setupAddRoutineButton()
         setupMenuButton()
 
+        // Check if user is logged in and load routines if logged in
+        checkUserSession()
+
         return root
     }
 
-    private fun setupMonthCalendar() {
-        updateCalendarDays()
-        highlightToday()
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Check if the result is OK
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_ADD_ROUTINE -> {
+                    // Refresh routines when a new routine is added
+                    checkUserSession()  // Re-fetch routines from the API or your data source
+                }
+                REQUEST_CODE_EDIT_ROUTINE -> {
+                    // Reload the data if the routine was edited
+                    checkUserSession()
+
+                }
+                else -> {
+                    // Handle other request codes if necessary
+                }
+            }
+        }
     }
 
+
+    /**
+     * Checks if the user is logged in and loads routines accordingly.
+     */
+    private fun checkUserSession() {
+        lifecycleScope.launch {
+            userPreference.getSession().collect { user ->
+                if (!user.isLogin) {
+                    Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Load routines if the user is logged in
+                    loadRoutines(user.userId)
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets up the horizontal calendar for the current month.
+     */
+    private fun setupMonthCalendar() {
+        updateCalendarDays() // Update the list of days in the current month
+        highlightToday() // Highlight today's date
+    }
+
+    /**
+     * Updates the calendar days and connects it with the calendar adapter.
+     */
     private fun updateCalendarDays() {
-        // Get all dates in the current month
         val daysInMonth = getDatesInMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
 
-        // Set adapter with date click listener
+        // Initialize the CalendarAdapter with click listener for date selection
         monthCalendarAdapter = CalendarAdapter(daysInMonth, routines) { selectedDate ->
-            // Show selected date in a text view
-            binding.currentDate.text =
-                SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedDate)
+            // Display selected date in the UI
+            binding.currentDate.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedDate)
+
+            // Filter routines based on the selected date
+            val formattedDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selectedDate)
+            lifecycleScope.launch {
+                userPreference.getSession().collect { user ->
+                    if (user.isLogin) {
+                        loadRoutines(user.userId, formattedDate) // Call API to filter routines
+                    }
+                }
+            }
         }
 
-        // Configure horizontal calendar layout
+        // Display the calendar in a horizontal layout
         binding.horizontalCalendar.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.horizontalCalendar.adapter = monthCalendarAdapter
     }
 
+    /**
+     * Sets up the buttons for month navigation (previous/next).
+     */
     private fun setupMonthNavigation() {
         binding.prevMonth.setOnClickListener {
             calendar.add(Calendar.MONTH, -1) // Navigate to previous month
@@ -85,68 +152,51 @@ class RoutineFragment : Fragment() {
         }
     }
 
+    /**
+     * Highlights today's date in the calendar.
+     */
     private fun highlightToday() {
         val today = Calendar.getInstance().time
         monthCalendarAdapter.highlightDate(today) // Highlight today's date
     }
 
+    /**
+     * Sets up the menu button that opens ProfileActivity.
+     */
     private fun setupMenuButton() {
         binding.iconMenu.setOnClickListener {
-            // Start ProfileActivity when the menu icon is clicked
             val intent = Intent(requireContext(), ProfileActivity::class.java)
             startActivity(intent)
         }
     }
 
+    /**
+     * Sets up the calendar button that opens a date picker.
+     */
     private fun setupCalendarButton() {
         binding.iconCalendar.setOnClickListener {
-            // Initialize MaterialDatePicker
             val datePicker = MaterialDatePicker.Builder.datePicker().build()
             datePicker.show(parentFragmentManager, "DATE_PICKER")
 
-            // Listener when user selects a date
             datePicker.addOnPositiveButtonClickListener { selection ->
                 val selectedDate = Date(selection)
-                // Show selected date
-                binding.currentDate.text =
-                    SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedDate)
+                val formattedDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selectedDate)
+                binding.currentDate.text = formattedDate
 
-                // Call method to update the view dynamically
-                updateCalendarViewToSelectedDate(selectedDate)
+                lifecycleScope.launch {
+                    userPreference.getSession().collect { user ->
+                        if (user.isLogin) {
+                            loadRoutines(user.userId, formattedDate) // Filter by selected date
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun getPositionOfDate(selectedDate: Date): Int {
-        val daysInMonth = getDatesInMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
-        return daysInMonth.indexOfFirst {
-            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) ==
-                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate)
-        }
-    }
-
-    private fun updateCalendarViewToSelectedDate(selectedDate: Date) {
-        // Set calendar to selected date
-        calendar.time = selectedDate
-
-        // Update days in the horizontal calendar
-        updateCalendarDays()
-
-        // Highlight the selected date
-        monthCalendarAdapter.highlightDate(selectedDate)
-
-        // Scroll the horizontal calendar to the selected date
-        val selectedPosition = getPositionOfDate(selectedDate)
-        binding.horizontalCalendar.layoutManager?.scrollToPosition(selectedPosition)
-    }
-
-    private fun setupAddRoutineButton() {
-        binding.addRoutine.setOnClickListener {
-            Toast.makeText(requireContext(), "Tambah rutinitas ditekan!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), AddRoutineActivity::class.java))
-        }
-    }
-
+    /**
+     * Returns all dates in a particular month.
+     */
     private fun getDatesInMonth(year: Int, month: Int): List<Date> {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
@@ -163,49 +213,60 @@ class RoutineFragment : Fragment() {
         return dates
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Load routines when Fragment resumes
-        loadRoutines()
-    }
+    /**
+     * Loads routines from the API for a particular user and date (optional).
+     */
+    private fun loadRoutines(userId: Int, date: String? = null) {
+        // Show the progress bar while loading routines
+        binding.loadingSpinner.visibility = View.VISIBLE
 
-    private fun loadRoutines() {
-        ApiConfig.getApiService().getRoutines().enqueue(object : Callback<List<Routine>> {
-            override fun onResponse(call: Call<List<Routine>>, response: Response<List<Routine>>) {
+        lifecycleScope.launch {
+            try {
+                val response = if (date != null) {
+                    ApiConfig.getApiService().getRoutinesByUserIdAndDate(userId, date)
+                } else {
+                    ApiConfig.getApiService().getRoutinesByUserId(userId)
+                }
+
                 if (response.isSuccessful) {
                     routines = response.body() ?: emptyList()
-                    // Update routine list in RecyclerView
-                    updateRoutineList(routines)
-
-                    // Update the calendar adapter with the new routines
-                    monthCalendarAdapter = CalendarAdapter(
-                        getDatesInMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)),
-                        routines
-                    ) { selectedDate ->
-                        binding.currentDate.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedDate)
-                    }
-
-                    // Notify adapter to update the view with new routines
-                    monthCalendarAdapter.notifyDataSetChanged()
-
-                    // Update the horizontal calendar with the updated adapter
-                    binding.horizontalCalendar.adapter = monthCalendarAdapter
-
+                    updateRoutineList(routines, ApiConfig.getApiService()) // Pass apiService here
                 } else {
-                    Toast.makeText(requireContext(), "Gagal memuat rutinitas", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to load routines", Toast.LENGTH_SHORT).show()
                 }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            } finally {
+                // Hide the progress bar after the operation is completed
+                binding.loadingSpinner.visibility = View.GONE
             }
-
-            override fun onFailure(call: Call<List<Routine>>, t: Throwable) {
-                Toast.makeText(requireContext(), "Kesalahan: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+        }
     }
 
-    private fun updateRoutineList(routines: List<Routine>) {
-        routineAdapter = RoutineAdapter(routines)
+
+    /**
+     * Updates the list of routines in the RecyclerView.
+     */
+    private fun updateRoutineList(routines: List<Routine>, apiService: ApiService) {
+        routineAdapter = RoutineAdapter(routines.toMutableList(), apiService)  // Pass only routineList and apiService
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = routineAdapter
+    }
+
+    /**
+     * Sets up the add routine button to navigate to AddRoutineActivity.
+     */
+    private fun setupAddRoutineButton() {
+        binding.addRoutine.setOnClickListener {
+            // Intent to open the AddRoutineActivity
+            val intent = Intent(requireContext(), AddRoutineActivity::class.java)
+            startActivityForResult(intent, 1)
+        }
+    }
+
+    companion object {
+        const val REQUEST_CODE_ADD_ROUTINE = 1
+        const val REQUEST_CODE_EDIT_ROUTINE = 2
     }
 
     override fun onDestroyView() {

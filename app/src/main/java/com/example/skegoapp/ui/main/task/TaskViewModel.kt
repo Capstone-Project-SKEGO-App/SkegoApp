@@ -24,17 +24,16 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     private val _updateSuccess = MutableLiveData<Boolean>()
     val updateSuccess: LiveData<Boolean> = _updateSuccess
 
-
     private val _priorityUpdateResult = MutableLiveData<Boolean>()
     val priorityUpdateResult: LiveData<Boolean> = _priorityUpdateResult
 
     private val _sortedTasks = MutableLiveData<List<Task>>()
     val sortedTasks: LiveData<List<Task>> = _sortedTasks
 
-    private var currentUserId: Int = 0 // Simpan userId saat sesi berjalan
+    private var currentUserId: Int = 0
 
     fun fetchTasks(userId: Int) {
-        currentUserId = userId // Simpan userId untuk digunakan kembali nanti
+        currentUserId = userId
         viewModelScope.launch {
             _loading.value = true
             try {
@@ -68,9 +67,7 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
             _loading.value = true
             try {
                 val response = repository.deleteTask(taskId)
-                // Tampilkan pesan sukses
                 _error.value = response.message
-                // Reload tasks setelah berhasil menghapus
                 fetchTasks(currentUserId)
             } catch (e: Exception) {
                 _error.value = "Failed to delete task: ${e.message}"
@@ -100,6 +97,7 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     fun updatePriorityScores(userId: Int) {
         viewModelScope.launch {
+            _loading.value = true
             try {
                 val response = repository.postGenerate(userId)
                 _priorityUpdateResult.postValue(response.message == "Priority scores updated successfully")
@@ -108,26 +106,25 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _priorityUpdateResult.postValue(false)
+            } finally {
+                _loading.value = false
             }
         }
     }
 
-    fun fetchSortedTasks(userId: Int) {
+    private fun fetchSortedTasks(userId: Int) {
         viewModelScope.launch {
+            _loading.value = true
             try {
-                // Ambil data dari repository
                 val tasksResponse = repository.getSortedTasks(userId)
+                val mappedTasks = tasksResponse.tasks.map { it.toTask() }
 
-                // Mapping TasksItem ke Task
-                val mappedTasks = tasksResponse.tasks?.mapNotNull { it?.toTask() } ?: emptyList()
-
-                // Update LiveData dengan data yang sudah di-mapping
                 _sortedTasks.postValue(mappedTasks)
             } catch (e: Exception) {
-                // Jika terjadi error, set daftar kosong
                 _sortedTasks.postValue(emptyList())
+            } finally {
+                _loading.value = false
             }
         }
     }
 }
-

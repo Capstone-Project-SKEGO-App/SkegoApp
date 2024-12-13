@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        android:text="Mon"
+        android:text="@string/mon"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="01"
+            android:text="@string/_01"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -38,6 +38,6 @@
         android:layout_width="10dp"
         android:layout_height="8dp"
         android:background="@drawable/circle_background"
-        android:visibility="gone"/> <!-- Di sini badge akan disembunyikan jika tidak ada rutinitas -->
+        android:visibility="gone"/>
 
 </LinearLayout>

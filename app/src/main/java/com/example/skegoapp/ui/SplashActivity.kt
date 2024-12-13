@@ -1,5 +1,6 @@
 package com.example.skegoapp.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.example.skegoapp.ui.main.MainActivity
 import com.example.skegoapp.ui.onboarding.OnboardingActivity
 import kotlinx.coroutines.*
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
     private val splashDuration = 2000L // Duration in milliseconds (2 seconds)

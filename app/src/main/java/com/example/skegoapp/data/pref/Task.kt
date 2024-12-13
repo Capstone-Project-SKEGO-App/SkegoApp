@@ -15,8 +15,8 @@ data class Task(
     var priority: Float,
     var category: String,
     var duration: String,
-    var status: String = "Not Started", // Default status
-    var detail: String = "" // Default detail
+    var status: String = "Not Started",
+    var detail: String = ""
 ) : Parcelable
 
 

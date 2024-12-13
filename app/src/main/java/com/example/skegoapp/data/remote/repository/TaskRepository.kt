@@ -36,5 +36,4 @@ class TaskRepository(private val apiService: ApiService) {
     suspend fun getSortedTasks(userId: Int): SortedTasksResponse {
         return apiService.getSortedTasks(userId)
     }
-
 }

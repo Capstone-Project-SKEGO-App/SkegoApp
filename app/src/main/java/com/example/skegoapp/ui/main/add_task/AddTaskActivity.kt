@@ -1,8 +1,10 @@
 package com.example.skegoapp.ui.main.add_task
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -146,6 +148,7 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("DefaultLocale")
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -164,6 +167,8 @@ class AddTaskActivity : AppCompatActivity() {
             )
         }, year, month, day).show()
     }
+
+    fun showDatePicker(view: View) {}
 
 
 }

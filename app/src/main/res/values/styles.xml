@@ -19,10 +19,6 @@
 
     </style>
 
-
-
-
-
     <!-- Bentuk untuk elemen kecil -->
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerSize">8dp</item>

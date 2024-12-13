@@ -1,6 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -10,11 +9,11 @@
         <!-- Menu Icon -->
         <ImageButton
             android:id="@+id/icon_menu"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:contentDescription="Profile Icon"
+            android:contentDescription="@string/profile_icon"
             android:scaleType="centerInside"
             android:src="@drawable/ic_profile"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Routine"
+            android:text="@string/routine"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -44,7 +43,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            android:contentDescription="Calendar Icon"
+            android:contentDescription="@string/calendar_icon"
             android:scaleType="centerInside"
             android:src="@drawable/ic_calendar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="Current Date"
+            android:text="@string/current_date"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
@@ -79,29 +78,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/current_date">
 
+            <!-- Previous Month Button -->
             <ImageButton
                 android:id="@+id/prev_month"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/ic_back"
-                android:contentDescription="Previous Month" />
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/previous_month"
+                android:src="@drawable/ic_arrow_back" />
 
+            <!-- Month Display -->
             <TextView
                 android:id="@+id/month_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="Month Year"
+                android:text="@string/month_year"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Next Month Button -->
             <ImageButton
                 android:id="@+id/next_month"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/ic_arrow_next"
-                android:contentDescription="Next Month" />
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/next_month"
+                android:src="@drawable/ic_arrow_next" />
         </LinearLayout>
 
         <!-- Horizontal Calendar -->
@@ -140,6 +144,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/background_shape" />
 
+        <!-- ProgressBar for Routine -->
+        <ProgressBar
+            android:id="@+id/loadingSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_routine"
@@ -148,6 +165,7 @@
             android:layout_margin="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="150dp"
+            android:contentDescription="@string/fab_routine"
             app:backgroundTint="#ffb332"
             app:elevation="6dp"
             app:layout_constraintBottom_toBottomOf="parent"

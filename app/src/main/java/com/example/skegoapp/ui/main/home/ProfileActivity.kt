@@ -3,6 +3,7 @@ package com.example.skegoapp.ui.main.home
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.skegoapp.R
 import com.example.skegoapp.data.pref.UserPreference
 import com.example.skegoapp.data.pref.dataStore
+import com.example.skegoapp.ui.AboutActivity
+import com.example.skegoapp.ui.main.ForgotPasswordActivity
 import com.example.skegoapp.ui.onboarding.OnboardingActivity
 import kotlinx.coroutines.launch
 
@@ -51,6 +54,19 @@ class ProfileActivity : AppCompatActivity() {
         // Logout ketika tombol logout ditekan
         logoutButton.setOnClickListener {
             logout()
+        }
+
+        // Setup "Reset Password" button click
+        findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
+            // Navigate to ForgotPasswordActivity
+            val intent = Intent(this@ProfileActivity, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+        findViewById<LinearLayout>(R.id.linearLayout2).setOnClickListener {
+            // Navigate to ForgotPasswordActivity
+            val intent = Intent(this@ProfileActivity, AboutActivity::class.java)
+            startActivity(intent)
         }
     }
 

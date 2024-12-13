@@ -9,22 +9,8 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiConfig: ApiConfig
 ) {
-
-    suspend fun saveSession(user: UserModel) {
-        userPreference.saveSession(user)
-    }
-
     fun getSession(): Flow<UserModel> {
         return userPreference.getSession()
-    }
-
-    suspend fun logout() {
-        userPreference.logout()
-    }
-
-    // If you want to check login status from repository
-    suspend fun isLoggedIn(): Boolean {
-        return userPreference.isLoggedIn()
     }
 
     companion object {

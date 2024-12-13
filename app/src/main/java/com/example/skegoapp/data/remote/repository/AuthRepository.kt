@@ -8,20 +8,13 @@ import com.example.skegoapp.data.remote.retrofit.ApiService
 
 class AuthRepository(private val apiService: ApiService) {
 
-    // Fungsi untuk register
     suspend fun registerUser(username: String, email: String, password: String): RegisterResponse {
         val registerRequest = RegisterRequest(username, email, password)
         return apiService.registerUser(registerRequest)
     }
 
-    // Fungsi untuk login
     suspend fun loginUser(email: String, password: String): LoginResponse {
         val loginRequest = LoginRequest(email, password)
         return apiService.loginUser(loginRequest)
     }
 }
-
-
-
-
-

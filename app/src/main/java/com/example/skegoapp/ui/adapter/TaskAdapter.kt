@@ -1,5 +1,6 @@
 package com.example.skegoapp.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ class TaskAdapter(
     private val editClickListener: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateTasks(newTasks: List<Task>) {
         tasks = newTasks
         notifyDataSetChanged()
@@ -55,6 +57,7 @@ class TaskAdapter(
         return TaskViewHolder(itemView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val currentTask = tasks[position]
 

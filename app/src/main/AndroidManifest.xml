@@ -16,6 +16,18 @@
         android:theme="@style/Theme.SkegoApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.detail_routine.DetailRoutineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.edit_routine.EditRoutineActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.main.edit_task.EditTaskActivity"
             android:exported="false" />
         <activity
@@ -32,7 +44,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.App.MaterialComponents" />
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false" />
