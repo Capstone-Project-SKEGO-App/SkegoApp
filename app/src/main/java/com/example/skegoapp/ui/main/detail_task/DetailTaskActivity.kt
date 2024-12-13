@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.skegoapp.R
 import com.example.skegoapp.data.pref.Task
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -17,18 +18,14 @@ class DetailTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_task)
 
-        // Ambil data dari Intent
-        task = intent.getParcelableExtra("TASK") ?: return // Ambil objek Task
-
+        task = intent.getParcelableExtra("TASK") ?: return
         val backButton: ImageButton = findViewById(R.id.btn_back)
         backButton.setOnClickListener {
             onBackPressed()
         }
 
-        // Tampilkan detail task
         displayTaskDetails(task)
 
-        // Set up button listeners
         setupButtonListeners()
     }
 
@@ -41,26 +38,21 @@ class DetailTaskActivity : AppCompatActivity() {
     }
 
     private fun setupButtonListeners() {
-        // Hapus tombol edit dan hapus jika tidak diperlukan
-        // Jika Anda ingin menambahkan logika lain, silakan sesuaikan di sini
     }
 
     fun formatDueDate(dateString: String, formatType: String): String {
         return try {
-            // Parse tanggal dari format backend
-            val zonedDateTime = ZonedDateTime.parse(dateString)
+            val localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()))
 
-            // Format ke format yang diinginkan
             val outputFormat = when (formatType) {
-                "itemTask" -> DateTimeFormatter.ofPattern("dd MMM", Locale.getDefault()) // Contoh: 26 Nov
-                "detailTask" -> DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault()) // Contoh: 26 November 2024
-                else -> DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()) // Default format
+                "itemTask" -> DateTimeFormatter.ofPattern("dd MMM", Locale.getDefault())
+                "detailTask" -> DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault())
+                else -> DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
             }
-            zonedDateTime.format(outputFormat)
+            localDate.format(outputFormat)
         } catch (e: Exception) {
             e.printStackTrace()
             ""
         }
     }
-
 }
