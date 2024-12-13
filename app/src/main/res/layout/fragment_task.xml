@@ -66,6 +66,7 @@
                 android:longClickable="true"
                 android:padding="12dp"
                 android:text="@string/generate"
+                android:textAllCaps="false"
                 android:textColor="#ffb332"
                 android:textSize="18sp"
                 app:cornerRadius="16dp"
